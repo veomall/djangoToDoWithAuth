@@ -1,7 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 
@@ -29,7 +27,7 @@ class RegisterPage(FormView):
 
     def form_valid(self, form):
         user = form.save()
-        if user is not None:
+        if user:
             login(self.request, user)
         return super(RegisterPage, self).form_valid(form)
 
@@ -54,11 +52,6 @@ class TaskList(LoginRequiredMixin, ListView):
 
         context['search_input'] = search_input
         return context 
-    
-class TaskDetail(LoginRequiredMixin, DetailView):
-    model = Task
-    context_object_name = 'task'
-    template_name = 'base/task.html'
 
 class TaskCreate(LoginRequiredMixin, CreateView):
     model = Task
